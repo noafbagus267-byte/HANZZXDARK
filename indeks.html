@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HANZZ X DARK LOGIN</title>
+    <style>
+        /* Reset dasar dan font */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #1a1a1a; /* Latar belakang gelap */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            color: white;
+        }
+
+        /* Container Utama */
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+        }
+
+        /* Styling Video */
+        .video-wrapper {
+            width: 100%;
+            max-width: 640px; /* Batas lebar maksimal */
+            aspect-ratio: 4 / 3; /* Rasio 4:3 Landscape */
+            background-color: #000;
+            border: 2px solid #444;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(225,0,18);
+        }
+
+        video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Memastikan video memenuhi kotak */
+        }
+
+        /* Styling Form */
+        .login-box {
+            background-color: #2c2c2c;
+            padding: 30px;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 640px; /* Sama lebar dengan video */
+            box-shadow: 0 4px 10px rgba(225,0,18);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff0000;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff0000;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background-color: #ff0000;
+        }
+
+        /* Pesan Error */
+        .error-message {
+            color: #ff4d4d;
+            text-align: center;
+            margin-top: 10px;
+            display: none; /* Tersembunyi secara default */
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Bagian Video -->
+        <div class="video-wrapper">
+            <!-- muted diperlukan agar autoplay berfungsi di browser modern -->
+            <video autoplay muted loop playsinline>
+                <source src="Vidio.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+
+        <!-- Bagian Form Login -->
+        <div class="login-box">
+            <h2>HANZZ X DARK LOGIN</h2>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Masukkan Username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Masukkan Password">
+            </div>
+            
+            <button onclick="cekLogin()">Masuk</button>
+            
+            <p id="errorMsg" class="error-message">Username atau Password salah</p>
+        </div>
+    </div>
+
+    <script>
+        function cekLogin() {
+            // Ambil nilai dari input
+            var user = document.getElementById('username').value;
+            var pass = document.getElementById('password').value;
+            var errorMsg = document.getElementById('errorMsg');
+
+            // Definisi Username dan Password yang benar
+            var correctUser = "HANZZXBUGWA";
+            var correctPass = "777";
+
+            // Cek kecocokan
+            if (user === correctUser && pass === correctPass) {
+                // Jika benar, alihkan ke link tujuan
+                window.location.href = "https://noafbagus267-byte.github.io/HANZZXDARK/";
+            } else {
+                // Jika salah, tampilkan pesan error
+                errorMsg.style.display = "block";
+            }
+        }
+    </script>
+
+</body>
+</html>
