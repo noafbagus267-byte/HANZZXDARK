@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhatsApp Bug Tool UI</title>
+    <title>HANZZ X DARK</title>
     <style>
         /* CSS: Desain Tampilan */
         body {
@@ -21,7 +21,7 @@
             background-color: #1a1a1a;
             padding: 20px;
             border-radius: 15px;
-            box-shadow: 0 0 20px rgba(0, 255, 0, 0.2);
+            box-shadow: 0 0 20px rgba(255,0,18);
             width: 90%;
             max-width: 500px;
             text-align: center;
@@ -30,7 +30,7 @@
 
         h2 {
             margin-top: 0;
-            color: #25D366; /* Warna WhatsApp Hijau */
+            color: #FF0001; /* Warna WhatsApp Hijau */
             text-transform: uppercase;
             letter-spacing: 2px;
         }
@@ -78,7 +78,7 @@
         }
 
         input[type="text"]:focus {
-            border-color: #25D366;
+            border-color: #FF0001;
         }
 
         /* Opsi Tombol */
@@ -101,9 +101,9 @@
         }
 
         button:hover {
-            background-color: #25D366;
+            background-color: #FF0001;
             color: black;
-            box-shadow: 0 0 10px #25D366;
+            box-shadow: 0 0 10px #FF0001;
         }
 
         /* Hasil Succes */
@@ -111,7 +111,7 @@
             margin-top: 15px;
             font-size: 24px;
             font-weight: bold;
-            color: #25D366;
+            color: #FF0001;
             display: none; /* Tersembunyi dulu */
             animation: popIn 0.5s ease;
         }
@@ -146,7 +146,7 @@
         <!-- Input Nomor Target -->
         <div class="input-group">
             <label>Nomor Target</label>
-            <input type="text" id="phoneNumber" value="+62" placeholder="Contoh: +628123456789">
+            <input type="text" id="phoneNumber" value="" placeholder="+62xxxxxxxxxxx">
         </div>
 
         <!-- Opsi -->
@@ -159,7 +159,7 @@
             <button onclick="processBug('Unbanned')">Unbanned</button>
         </div>
 
-        <div class="loader" id="loader">Mengirim paket bug...</div>
+        <div class="loader" id="loader">Loading...</div>
         <div id="result">SUCCESS</div>
     </div>
 
