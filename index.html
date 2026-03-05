@@ -1,0 +1,725 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HANZZ X DARK</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Creepster&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <!-- GSAP Animations -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    
+    <style>
+        :root {
+            --neon-green: #00ff41;
+            --blood-red: #ff0000;
+            --dark-bg: #0a0a0a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: black;
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Inter', sans-serif;
+            user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            touch-action: manipulation;
+        }
+
+        .terminal-font { font-family: 'JetBrains Mono', monospace; }
+        .scary-font { font-family: 'Creepster', cursive; }
+
+         /* --- BAGIAN 1: TAMPILAN LOADING --- */
+        #loading-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 10;
+        }
+
+        #loading-screen video {
+            aspect-ratio: 4 / 3;
+            width: 500px;
+            max-width: 90%;
+            border: 5px solid rgb(255, 0, );
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
+            margin-bottom: 20px;
+            object-fit: cover;
+        }
+
+        .title {
+            color: rgb(255, 0, 0);
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-family: 'Creepster', cursive;
+        }
+
+        .loading-text {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        .progress-container {
+            width: 400px;
+            max-width: 80%;
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid rgb(255, 0, 0);
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: rgb(255, 0, 0);
+            transition: width 0.1s linear;
+        }
+
+        /* --- BAGIAN 2: TAMPILAN LOGIN --- */
+        #login-view {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            width: 100%;
+            max-width: 640px;
+            background-color: #000;
+            height: auto;
+            min-height: 100vh;
+            justify-content: center;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 5;
+        }
+
+        .video-wrapper-login {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            background-color: #000;
+            border: 2px solid #444;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(255,0,18);
+        }
+
+        .video-wrapper-login video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .login-box {
+            background-color: #2c2c2c;
+            padding: 30px;
+            border-radius: 8px;
+            width: 100%;
+            box-shadow: 0 4px 10px rgba(255,0,18);
+        }
+
+        .login-box h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #ff0000;
+            font-family: 'Creepster', cursive;
+            letter-spacing: 2px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #444;
+            border-radius: 4px;
+            background-color: #333;
+            color: white;
+            font-size: 16px;
+        }
+
+        .input-group input:focus {
+            outline: none;
+            border-color: #ff0000;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        button.login-btn {
+            width: 100%;
+            padding: 12px;
+            background-color: #ff0000;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        button.login-btn:hover {
+            background-color: #cc0000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        /* --- BAGIAN ERROR (AKSES DITOLAK) --- */
+        #error-screen {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 20;
+        }
+
+        .error-box {
+            border: 5px solid rgb(255, 0, 0);
+            padding: 40px;
+            background-color: #000;
+            text-align: center;
+            box-shadow: 0 0 25px rgba(255, 0, 0, 0.8);
+            max-width: 90%;
+            width: 400px;
+        }
+
+        .error-box h1 {
+            color: rgb(255, 0, 0);
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+        }
+
+        .error-box p {
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+
+        .error-progress-container {
+            width: 100%;
+            height: 10px;
+            background-color: #333;
+            border-radius: 5px;
+            overflow: hidden;
+            border: 1px solid rgb(255, 0, 0);
+            margin-top: 20px;
+        }
+
+        .error-progress-fill {
+            height: 100%;
+            width: 0%;
+            background-color: rgb(255, 0, 0);
+            transition: width 3s linear;
+        }
+
+        /* --- BAGIAN 3: TAMPILAN DASHBOARD --- */
+        #dashboard-view {
+            display: none;
+            background-color: #000;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(255,0,18);
+            width: 90%;
+            max-width: 500px;
+            text-align: center;
+            border: 1px solid #333;
+            color: white;
+            position: absolute;
+            z-index: 15;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        h2.dashboard-title {
+            margin: 0;
+            color: #FF0001;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-size: 1.5rem;
+            font-family: 'Creepster', cursive;
+        }
+
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+
+        .menu-icon {
+            font-size: 24px;
+            color: #ff0000;
+            cursor: pointer;
+            padding: 5px 10px;
+            border: 1px solid #333;
+            border-radius: 5px;
+            background-color: #1a1a1a;
+        }
+
+        .menu-icon:hover {
+            background-color: #333;
+        }
+
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 40px;
+            background-color: #222;
+            min-width: 180px;
+            box-shadow: 0px 8px 16px 0px rgba(255, 0, 0, 0.2);
+            z-index: 1;
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            text-align: left;
+            overflow: hidden;
+        }
+
+        .dropdown-content p {
+            color: #ddd;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-size: 14px;
+            border-bottom: 1px solid #333;
+            margin: 0;
+        }
+
+        .dropdown-content p:last-child {
+            border-bottom: none;
+        }
+
+        .dropdown-content .label-info {
+            color: #ff0000;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .show {
+            display: block;
+        }
+
+        .video-container {
+            width: 100%;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #000;
+            border: 2px solid #ff0000;
+        }
+
+        .video-container video {
+            width: 100%;
+            height: auto;
+            display: block;
+            object-fit: cover;
+            max-height: 200px;
+        }
+
+        .input-group-dashboard {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .input-group-dashboard label {
+            font-size: 12px;
+            color: #aaa;
+            display: block;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        input[type="text"].dashboard-input, 
+        select.dashboard-input { 
+            width: 100%;
+            padding: 12px;
+            background-color: #2d2d2d;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        input[type="text"].dashboard-input:focus, 
+        select.dashboard-input:focus {
+            border-color: #FF0001;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.3);
+        }
+
+        button.send-btn {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff0000;
+            border: none;
+            color: white;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 18px;
+            text-transform: uppercase;
+            margin-top: 10px;
+            transition: all 0.3s;
+        }
+
+        button.send-btn:hover {
+            background-color: #cc0000;
+            box-shadow: 0 0 15px #ff0000;
+        }
+
+        #result {
+            margin-top: 15px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #FF0001;
+            display: none; 
+            animation: popIn 0.5s ease;
+        }
+
+        @keyframes popIn {
+            0% { transform: scale(0); }
+            80% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .loader {
+            display: none;
+            color: #aaa;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .terminal-box {
+            background-color: #111;
+            border: 1px solid #ff0000;
+            border-radius: 8px;
+            padding: 10px;
+            margin-top: 15px;
+            max-height: 150px;
+            overflow-y: auto;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            text-align: left;
+            color: #ff1010;
+        }
+
+        .terminal-line {
+            margin: 2px 0;
+            border-bottom: 1px solid #222;
+            padding: 2px 0;
+        }
+
+        .progress-text {
+            color: #ff0000;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body oncontextmenu="return false;">
+
+    <div class="scanline"></div>
+
+    <!-- ================= BAGIAN 1: LOADING SCREEN ================= -->
+    <div id="loading-screen">
+        <video autoplay muted loop playsinline>
+            <source src="Vidio1.mp4" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+        </video>
+        <div class="title glitch">HANZZ X DARK</div>
+        <div class="loading-text">Loading...</div>
+        <div class="progress-container">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+    </div>
+
+    <!-- ================= BAGIAN 2: LOGIN ================= -->
+    <div id="login-view">
+        <div class="video-wrapper-login">
+            <video autoplay muted loop playsinline>
+                <source src="Vidio.mp4" type="video/mp4">
+                Browser Anda tidak mendukung tag video.
+            </video>
+        </div>
+        <div class="login-box">
+            <h2>HANZZ X DARK LOGIN</h2>
+            <div class="input-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" placeholder="Masukkan Username">
+            </div>
+            <div class="input-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" placeholder="Masukkan Password">
+            </div>
+            <button class="login-btn" onclick="cekLogin()">ACCESS</button>
+        </div>
+    </div>
+
+    <!-- ================= BAGIAN ERROR (AKSES DITOLAK) ================= -->
+    <div id="error-screen">
+        <div class="error-box">
+            <h1 class="glitch">⚠️AKSES DITOLAK⚠️</h1>
+            <p>Username atau Password salah</p>
+            <p style="margin-top: 15px; font-size: 0.9rem; color: #ccc;">Kembali dalam <span id="countdown" style="color: red; font-weight: bold;">3</span> detik...</p>
+            
+            <div class="error-progress-container">
+                <div class="error-progress-fill" id="errorProgressBar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================= BAGIAN 3: DASHBOARD ================= -->
+    <div id="dashboard-view">
+        <div class="dashboard-header">
+            <h2 class="dashboard-title glitch">HANZZ X DARK</h2>
+            
+            <div class="dropdown">
+                <span class="menu-icon" onclick="toggleMenu()">&#9776;</span>
+                
+                <div id="accountDropdown" class="dropdown-content">
+                    <p><span class="label-info">User:</span> HANZZ</p>
+                    <p><span class="label-info">Status:</span> Admin</p>
+                    <p><span class="label-info">Mode:</span>ViP</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="video-container">
+            <video autoplay loop muted playsinline>
+                <source src="Vidio.mp4" type="video/mp4">
+                Browser kamu tidak mendukung video.
+            </video>
+        </div>
+        
+        <div class="input-group-dashboard">
+            <label>Nomor Target (Format Internasional)</label>
+            <input type="text" id="target-number" class="dashboard-input" placeholder="+628xxxxxxxxxx">
+        </div>
+
+        <div class="input-group-dashboard">
+            <label>Pilih Metode Ban</label>
+            <select id="method-select" class="dashboard-input">
+                <option value="Ban 1 Jam">Ban 1 Jam (Sementara)</option>
+                <option value="Banned">Banned (Permanen)</option>
+                <option value="Spam">Spam(Spam target)</option>
+                <option value="Log out">Logout(Logout paksa target)</option>
+                <option value="Force Close">Force Close(Fc target)</option>
+                <option value="Blank">Blank(Blank terget)</option>
+                <option value="C1">C1(Membuat target saat di chat centang 1)</option>
+                <option value="Unbanned">Unbanned(Membebaskan target)</option>
+            </select>
+        </div>
+
+        <button class="send-btn" onclick="startExecution()">SEND</button>
+        
+        <div id="console-box" style="display: none; width: 100%;">
+            <div class="flex justify-between items-center mt-4 mb-2 px-1">
+                <span class="text-[10px] font-bold text-red-500 uppercase">Send Bug</span>
+                <span id="progress-val" class="text-[10px] terminal-font text-red-500">0%</span>
+            </div>
+            <div id="terminal" class="terminal-box">
+                <!-- Logs akan muncul di sini -->
+            </div>
+        </div>
+        
+        <div class="loader" id="loader">Loading...</div>
+        <div id="result">SUCCESS</div>
+    </div>
+
+    <script>
+        // --- 1. LOGIKA LOADING AWAL ---
+        const loadingDuration = 5000; 
+        const startTime = Date.now();
+        const progressBar = document.getElementById('progressBar');
+        const loadingScreen = document.getElementById('loading-screen');
+        const loginView = document.getElementById('login-view');
+
+        function updateProgress() {
+            const now = Date.now();
+            const elapsed = now - startTime;
+            let percentage = (elapsed / loadingDuration) * 100;
+
+            if (percentage >= 100) {
+                percentage = 100;
+                progressBar.style.width = "100%";
+                
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    loginView.style.display = 'flex';
+                }, 500); 
+                return;
+            }
+
+            progressBar.style.width = percentage + "%";
+            requestAnimationFrame(updateProgress);
+        }
+
+        requestAnimationFrame(updateProgress);
+
+        // --- 2. LOGIKA LOGIN (DENGAN PROGRESS BAR ERROR) ---
+        function cekLogin() {
+            var user = document.getElementById('username').value;
+            var pass = document.getElementById('password').value;
+            var loginView = document.getElementById('login-view');
+            var dashboardView = document.getElementById('dashboard-view');
+            var errorScreen = document.getElementById('error-screen');
+            var errorProgressBar = document.getElementById('errorProgressBar');
+
+            var correctUser = "HANZZXDARK";
+            var correctPass = "BYHANZZ";
+
+            if (user === correctUser && pass === correctPass) {
+                loginView.style.display = 'none';
+                dashboardView.style.display = 'block';
+                
+                // Animasi masuk
+                gsap.fromTo("#dashboard-view", {scale: 0.8, opacity: 0}, {scale: 1, opacity: 1, duration: 0.5});
+            } else {
+                loginView.style.display = 'none';
+                errorScreen.style.display = 'flex';
+                
+                let countdown = 3;
+                const countdownSpan = document.getElementById('countdown');
+                countdownSpan.innerText = countdown;
+                
+                errorProgressBar.style.transition = 'none';
+                errorProgressBar.style.width = "0%";
+
+                setTimeout(() => {
+                    errorProgressBar.style.transition = 'width 3s linear';
+                    errorProgressBar.style.width = "100%";
+                }, 50);
+
+                const interval = setInterval(() => {
+                    countdown--;
+                    countdownSpan.innerText = countdown;
+                    
+                    if (countdown <= 0) {
+                        clearInterval(interval);
+                        errorScreen.style.display = 'none';
+                        loginView.style.display = 'flex';
+                        
+                        document.getElementById('username').value = '';
+                        document.getElementById('password').value = '';
+                    }
+                }, 1000);
+            }
+        }
+
+        // --- 3. LOGIKA MENU AKUN ---
+        function toggleMenu() {
+            document.getElementById("accountDropdown").classList.toggle("show");
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.menu-icon')) {
+                var dropdowns = document.getElementsByClassName("dropdown-content");
+                for (var i = 0; i < dropdowns.length; i++) {
+                    var openDropdown = dropdowns[i];
+                    if (openDropdown.classList.contains('show')) {
+                        openDropdown.classList.remove('show');
+                    }
+                }
+            }
+        }
+
+        // --- 4. LOGIKA EKSEKUSI BUG ---
+        const fakeLogs = [
+            "Memndapatkan informasi target...",
+            "Mendapatkan IP target...",
+            "Mengidentifikasi database target...",
+            "Target ditemukan: [MENGEKSTRAKSI DATA]",
+            "Send Bug...",
+            "Memicu sensor keamanan WhatsApp...",
+            "Menghapus sesi login aktif...",
+            "Mengirim paket Bug...",
+            "STATUS: Nomor target berhasil di bug."
+        ];
+
+        async function startExecution() {
+            const num = document.getElementById('target-number').value;
+            const methodSelect = document.getElementById('method-select');
+            const selectedMethod = methodSelect.options[methodSelect.selectedIndex].text;
+            
+            if (!num || num.length < 5) {
+                alert("Masukkan nomor target yang valid!");
+                return;
+            }
+
+            document.getElementById('console-box').style.display = 'block';
+            document.getElementById('result').style.display = 'none';
+            document.getElementById('loader').style.display = 'none';
+            
+            const term = document.getElementById('terminal');
+            const prog = document.getElementById('progress-val');
+            term.innerHTML = "";
+
+            term.innerHTML += `<div class="terminal-line">[${new Date().toLocaleTimeString()}] > Metode: ${selectedMethod}</div>`;
+
+            for(let i = 0; i < fakeLogs.length; i++) {
+                const delay = Math.random() * 500 + 300;
+                await new Promise(r => setTimeout(r, delay));
+                
+                const line = document.createElement('div');
+                line.className = 'terminal-line';
+                line.innerHTML = `[${new Date().toLocaleTimeString()}] > ${fakeLogs[i]}`;
+                term.appendChild(line);
+                term.scrollTop = term.scrollHeight;
+
+                prog.innerText = `${Math.round(((i+1)/fakeLogs.length)*100)}%`;
+            }
+            
+            document.getElementById('result').style.display = 'block';
+            gsap.to("#result", {scale: 1.2, duration: 0.2, yoyo: true, repeat: 1});
+        }
+    </script>
+</body>
+</html>
